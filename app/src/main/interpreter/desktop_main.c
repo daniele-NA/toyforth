@@ -1,3 +1,8 @@
+#include "compiler/compiler.h"
+#include "runtime/runtime.h"
+#include "data/s_tfcontext.h"
+#include "debug.h"
+
 int main(int argc, char **argv) {
     s_tfcontext *ctx = tfcontextCreate();
 

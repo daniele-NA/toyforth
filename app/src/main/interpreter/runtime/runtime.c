@@ -32,14 +32,14 @@ void basicMathFunctions(s_tfcontext *ctx, char *name) {
 }
 
 bool runSymbol(s_tfcontext *ctx, s_tfobj *word) {
-    LOG_I("Running symbol");
+    LOG_I("Running symbol\n");
     s_function_table_entry *entry = tfcontextGetFunction(ctx, word);
     if (entry == NULL) return false;
 
     if (entry->user_func) {
         return false; // fixme to implement
     }else {
-        LOG_I("Executing callback");
+        LOG_I("Executing callback\n");
         entry->callback(ctx,entry->name->str.ptr);
     }
 
@@ -48,7 +48,7 @@ bool runSymbol(s_tfcontext *ctx, s_tfobj *word) {
 
 void exec(s_tfcontext *ctx, const s_tfobj *obj) {
     assert(obj->type == LIST);
-    LOG_I("Passed exec assertion");
+    LOG_I("Passed exec assertion\n");
     for (size_t i = 0; i < obj->list.len; ++i) {
         s_tfobj *word = obj->list.ele[i];
         switch (word->type) {

@@ -14,7 +14,6 @@
 
 // Usa perror per l’errore di sistema
 #define LOG_E(msg, ...) do { \
-printf("[ERROR] "); \
 printf(msg, ##__VA_ARGS__); \
 printf(": "); \
 perror(""); \

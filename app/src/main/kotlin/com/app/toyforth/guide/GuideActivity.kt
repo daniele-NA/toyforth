@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.noties.markwon.Markwon
 
@@ -32,12 +33,13 @@ class GuideActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .background(androidx.compose.ui.graphics.Color.Black)
-                            .padding(innerPadding),
+                            .padding(innerPadding).padding(horizontal = 16.dp),
                     ) {
                         AndroidView(
+                            modifier = Modifier.padding(top = 16.dp),
                             factory = { ctx ->
                                 TextView(ctx).apply {
-                                    setTextColor(Color.RED)
+                                    setTextColor(Color.WHITE)
                                     val markwon = Markwon.builder(ctx).build()
 
                                     val markdown = assets.open("README.md").bufferedReader()

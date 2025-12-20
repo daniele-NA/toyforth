@@ -4,7 +4,7 @@
 /* ===== Types ===== */
 
 typedef enum {
-    INT, STR, BOOL, SYMBOL, LIST
+    INT, STR, SYMBOL, LIST
 } e_tfobj_type;
 
 typedef enum {

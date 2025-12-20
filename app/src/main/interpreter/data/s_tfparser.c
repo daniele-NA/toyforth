@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 bool tfparserIsSymbol(char c) {
-    const char sym_chars[] = "+-*/";
+    const char sym_chars[] = "+-*/powdupabs";  // pow dup abs
     return isalpha((unsigned char)c) || strchr(sym_chars, c) != NULL;
 }
 

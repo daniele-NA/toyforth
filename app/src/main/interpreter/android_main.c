@@ -26,7 +26,7 @@ Java_com_app_toyforth_MainActivity_runCommand(JNIEnv *env, jclass clazz, jstring
 
     exec(ctx, obj);
 
-    // tfobjDump(tfcontextGetStack(ctx));
+//    tfobjDump(tfcontextGetStack(ctx));
 
     (*env)->ReleaseStringUTFChars(env, jinstruction, instruction);
 

@@ -94,11 +94,6 @@ s_tfobj *tfobjCreateInt(int value) {
     return o;
 }
 
-s_tfobj *tfobjCreateBool(int value) {
-    s_tfobj *o = tfobjCreate(BOOL);
-    o->i = value;
-    return o;
-}
 
 s_tfobj *tfobjCreateList(void) {
     s_tfobj *o = tfobjCreate(LIST);

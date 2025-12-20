@@ -20,6 +20,9 @@ s_tfcontext *tfcontextCreate(void) {
     tfcontextNewCFunction(ctx,"-",basicMathFunctions);
     tfcontextNewCFunction(ctx,"*",basicMathFunctions);
     tfcontextNewCFunction(ctx,"/",basicMathFunctions);
+    tfcontextNewCFunction(ctx,"pow",basicMathFunctions);
+    tfcontextNewCFunction(ctx,"dup",basicMathFunctions);
+    tfcontextNewCFunction(ctx,"abs",basicMathFunctions);
 
     return ctx;
 }

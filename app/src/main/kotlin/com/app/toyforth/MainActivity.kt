@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -44,15 +45,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-
                     TopAppBar(
                         title = {
                             Text(
                                 "Toy Forth",
-                                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 25.sp, color = Color.White)
                             )
                         },
-                        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF151515)),
                         actions = {
                             IconButton(onClick = {
                                 startActivity(Intent(this@MainActivity, GuideActivity::class.java))
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                                 Icon(
                                     imageVector = Icons.Default.Info,
                                     contentDescription = "Guide",
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                    tint = Color.White
                                 )
                             }
                         }

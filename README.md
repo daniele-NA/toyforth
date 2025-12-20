@@ -27,7 +27,7 @@ Use with care.
 
 ## 🎥 Preview
 
-<video src="ASSETS/preview.mp4" controls autoplay loop style="max-width:100%;height:auto;"></video>
+[Watch the Video](ASSETS/preview.mp4)
 
 ## 🖥️ Interactive Shell
 
@@ -54,6 +54,30 @@ To add new functionality:
 4. Test carefully
 
 JNI changes are only needed when interaction with Kotlin is required.
+
+To add a new mathematical function:
+
+1. **Update the symbol list** (`sym_chars`) in `tfparserIsSymbol`:
+
+```c
+const char sym_chars[] = "+-*/powdupabsnewFunction";
+```
+
+2. **Register the function** in `tfcontextCreate`:
+
+```c
+tfcontextNewCFunction(ctx,"newFunction",basicMathFunctions);
+```
+
+3. **Implement the callback** in `basicMathFunctions`:
+
+```c
+if(strcmp(word,"newFunction")==0){
+    // code for the new function
+}
+```
+
+4. Rebuild the native library and test.
 
 ## 🧩 Tech Stack
 

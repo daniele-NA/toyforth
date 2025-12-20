@@ -54,4 +54,5 @@ dependencies {
 
 
     implementation(libs.splash)
+    implementation(libs.markwon)
 }

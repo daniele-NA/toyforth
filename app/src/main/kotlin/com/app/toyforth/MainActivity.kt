@@ -1,5 +1,6 @@
 package com.app.toyforth
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.app.toyforth.guide.GuideActivity
 import com.app.toyforth.presentation.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -53,7 +55,7 @@ class MainActivity : ComponentActivity() {
                         colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                         actions = {
                             IconButton(onClick = {
-                                // todo navigate to guide page
+                                startActivity(Intent(this@MainActivity, GuideActivity::class.java))
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Info,

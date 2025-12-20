@@ -8,28 +8,26 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
-    companion object{
-         const val LINE_PREFIX ="shell > "
+    companion object {
+        const val LINE_PREFIX = "user@android:~$ "
+        const val CLEAR_COMMAND = "clear"
     }
 
-    private val _lines= MutableStateFlow<List<Line>>(emptyList())
-    val lines=_lines.asStateFlow()
+    private val _lines = MutableStateFlow<List<Line>>(emptyList())
+    val lines = _lines.asStateFlow()
 
-    init {
-        _lines.update {
-            listOf(
-                Line(value = "status --verbose", byUser = true),
-                Line(value = "connect localhost:8080", byUser = true),
-                Line(value = "fetch --limit 10", byUser = false),
-                Line(value = "run task_dummy --force", byUser = true),
-                Line(value = "exit", byUser = true)
-            )
+    // Controllo sui caratteri ed esecuzione comando
+    fun runCommand(rawInput: String) {
+
+        // clean command
+        if (rawInput.removePrefix(LINE_PREFIX) == CLEAR_COMMAND) {
+            _lines.update { emptyList() };return;
         }
-    }
+        if (rawInput.isEmpty() || !Regex("^[0-9+\\-*/% ]+$").matches(rawInput)) return
 
-    fun runCommand(rawInput:String){
+
         val input = rawInput.removePrefix(LINE_PREFIX)
         _lines.update {
             _lines.value.plus(Line(value = input, byUser = true))
@@ -44,12 +42,10 @@ class MainViewModel: ViewModel() {
                 _lines.value.plus(Line(value = result, byUser = false))
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             LOG("Eccezione runCommand ${e.message}")
         }
     }
-
-
 
 
 }

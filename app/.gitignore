@@ -1,3 +1,4 @@
 /build
 src/main/interpreter/cmake-build-debug
 src/main/interpreter/.idea
+release

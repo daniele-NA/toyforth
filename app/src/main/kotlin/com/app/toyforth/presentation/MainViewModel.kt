@@ -14,10 +14,11 @@ class MainViewModel : ViewModel() {
     val lines = _lines.asStateFlow()
 
 
-    // == LINT == //
+    // == UY BEAUTY == //
     init {
         _lines.update {
             listOf(
+                Line("init", byUser = true),
                 Line("start", byUser = true),
                 Line("loading...", byUser = false),
             )

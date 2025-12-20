@@ -4,7 +4,9 @@
 
 
 /* ============== Allocation Wrappers ============== */
+/* Safe memory allocation wrappers */
 
+/* Safely allocate memory. Exits if malloc fails. */
 static void *xmalloc(const unsigned long long size) {
     void *ptr = malloc(size);
     if (ptr == NULL) {
@@ -14,6 +16,7 @@ static void *xmalloc(const unsigned long long size) {
     return ptr;
 }
 
+/* Safely reallocate memory. Exits if realloc fails. */
 static void *xrealloc(void *old_ptr,const unsigned long long size) {
     void *ptr = realloc(old_ptr,size);
     if (ptr == NULL) {

@@ -9,6 +9,7 @@
 
 /* ===== Internal ===== */
 
+/* Create a new object with given type and ref_count = 1 */
 static s_tfobj *tfobjCreate(e_tfobj_type type) {
     s_tfobj *o = xmalloc(sizeof(*o));
     o->type = type;
@@ -47,23 +48,17 @@ void tfobjFree(s_tfobj *o) {
     free(o);
 }
 
-
 /* ===== Utilities ==== */
 
-// Compares two string objects and returns their comparison state:
-// SAME_MEMBER   -> strings are identical
-// MAJOR_MEMBER_1 -> 'a' is greater than 'b'
-// MAJOR_MEMBER_2 -> 'a' is less than 'b'
+/* Compare two string objects */
 e_comparison_state tfobjCompareString(s_tfobj *a, s_tfobj *b) {
-    assert(a!=NULL && b!=NULL);
+    assert(a != NULL && b != NULL);
 
     const unsigned long long min_len = a->str.len < b->str.len ? a->str.len : b->str.len;
-
-    // Comparo solo la parte comune ( scorre con min_len progressivamenre)
     const int cmp = memcmp(a->str.ptr, b->str.ptr, min_len);
 
     if (cmp == 0) {
-        if (a->str.len == b->str.len)return SAME_MEMBER;
+        if (a->str.len == b->str.len) return SAME_MEMBER;
         if (a->str.len > b->str.len) return MAJOR_MEMBER_1;
         return MAJOR_MEMBER_2;
     }
@@ -94,7 +89,6 @@ s_tfobj *tfobjCreateInt(int value) {
     return o;
 }
 
-
 s_tfobj *tfobjCreateList(void) {
     s_tfobj *o = tfobjCreate(LIST);
     o->list.ele = NULL;
@@ -104,6 +98,7 @@ s_tfobj *tfobjCreateList(void) {
 
 /* ===== List ===== */
 
+/* Push element to list */
 void tfobjListPush(s_tfobj *l, s_tfobj *ele) {
     l->list.ele = xrealloc(l->list.ele, sizeof(s_tfobj *) * (l->list.len + 1));
     l->list.ele[l->list.len++] = ele;
@@ -111,51 +106,41 @@ void tfobjListPush(s_tfobj *l, s_tfobj *ele) {
 
 /* ===== Debug ===== */
 
+/* Dump list to stdout */
 void tfobjDump(const s_tfobj *program) {
-    if(program==NULL || program->list.ele==NULL || program->type!=LIST) return;
+    if (program == NULL || program->list.ele == NULL || program->type != LIST) return;
     LOG_I("[");
     for (size_t i = 0; i < program->list.len; ++i) {
         const s_tfobj *o = program->list.ele[i];
-        if(o==NULL) continue;
+        if (o == NULL) continue;
         switch (o->type) {
-            case INT: LOG_I("%d", o->i);
-                break;
-            case SYMBOL: if(o->str.ptr!=NULL) LOG_I("%s", o->str.ptr);
-                break;
-            case LIST: tfobjDump(o);
-                break;
-            default: LOG_I("?");
-                break;
+            case INT: LOG_I("%d", o->i); break;
+            case SYMBOL: if (o->str.ptr != NULL) LOG_I("%s", o->str.ptr); break;
+            case LIST: tfobjDump(o); break;
+            default: LOG_I("?"); break;
         }
-        if (i < program->list.len - 1)LOG_I(" ");  // LINT
+        if (i < program->list.len - 1) LOG_I(" ");
     }
     LOG_I("]\n");
 }
 
-char * tfobjToString(const s_tfobj *program){
-    if(program==NULL || program->list.ele==NULL || program->type!=LIST) return "";
+/* Convert list to string */
+char *tfobjToString(const s_tfobj *program) {
+    if (program == NULL || program->list.ele == NULL || program->type != LIST) return "";
 
     char *ret = calloc(256, 1);
     if (!ret) return NULL;
 
     for (size_t i = 0; i < program->list.len; ++i) {
         const s_tfobj *o = program->list.ele[i];
-        if(o==NULL) continue;
+        if (o == NULL) continue;
         switch (o->type) {
-            case INT: {
-                // parsing e concatena
-                snprintf(ret + strlen(ret),
-                        sizeof(ret) - strlen(ret),
-                        "%d", o->i);
+            case INT:
+                snprintf(ret + strlen(ret), sizeof(ret) - strlen(ret), "%d", o->i);
                 break;
-            }
-            case SYMBOL: if(o->str.ptr!=NULL) strcat(ret,o->str.ptr);
-                break;
-            case LIST: tfobjDump(o);
-                break;
-            default:
-                strcat(ret,"?");
-                break;
+            case SYMBOL: if (o->str.ptr != NULL) strcat(ret, o->str.ptr); break;
+            case LIST: tfobjDump(o); break;
+            default: strcat(ret, "?"); break;
         }
     }
     return ret;

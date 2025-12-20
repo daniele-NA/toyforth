@@ -4,22 +4,25 @@
 #include <string.h>
 #include <stdlib.h>
 
+/* Check if a character is a valid symbol (letters or operator characters) */
 bool tfparserIsSymbol(char c) {
-    const char sym_chars[] = "+-*/powdupabs";  // pow dup abs
+    const char sym_chars[] = "+-*/powdupabs";  // Supported multi-char symbols
     return isalpha((unsigned char)c) || strchr(sym_chars, c) != NULL;
 }
 
+/* Skip whitespace characters in the parser */
 void tfparserParseSpaces(s_tfparser *parser) {
     while (isspace((unsigned char)parser->p[0]))
         parser->p++;
 }
 
+/* Parse an integer number from the parser */
 s_tfobj *tfparserParseNumber(s_tfparser *parser) {
     char buf[MAX_NUM_LEN];
     const char *start = parser->p;
 
     if (parser->p[0] == '-')
-        parser->p++; // numero negativo
+        parser->p++; // Negative number
 
     while (parser->p[0] && isdigit((unsigned char)parser->p[0]))
         parser->p++;
@@ -34,6 +37,7 @@ s_tfobj *tfparserParseNumber(s_tfparser *parser) {
     return tfobjCreateInt(atoi(buf));
 }
 
+/* Parse a symbol from the parser */
 s_tfobj *tfparserParseSymbol(s_tfparser *parser) {
     const char *start = parser->p;
 

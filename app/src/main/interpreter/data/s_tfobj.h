@@ -2,20 +2,21 @@
 #include <stdbool.h>
 
 /* ===== Types ===== */
-
 typedef enum {
     INT, STR, SYMBOL, LIST
 } e_tfobj_type;
 
+/* Comparison state for string/object comparison */
 typedef enum {
     SAME_MEMBER,
     MAJOR_MEMBER_1,
     MAJOR_MEMBER_2
 } e_comparison_state;
 
+/* Forth object structure */
 typedef struct s_tfobj {
     int ref_count;
-    e_tfobj_type type; // int, string, list, ecc.
+    e_tfobj_type type; // int, string, symbol, list, etc.
     union {
         int i;
         struct {
@@ -37,6 +38,7 @@ void tfobjFree(s_tfobj *o);
 
 /* ===== Utilities ===== */
 
+/* Compare two string objects */
 e_comparison_state tfobjCompareString(s_tfobj *a,s_tfobj *b);
 
 /* ===== Creation ===== */
@@ -49,10 +51,8 @@ s_tfobj *tfobjCreateList(void);
 
 /* ===== List ===== */
 
-/* It is up to the caller to retain the element if needed */
+/* Push an element to the list; caller must retain element if needed */
 void tfobjListPush(s_tfobj *list, s_tfobj *ele);
-
-/* ===== Debug ===== */
 
 void tfobjDump(const s_tfobj *program);
 char * tfobjToString(const s_tfobj *program);

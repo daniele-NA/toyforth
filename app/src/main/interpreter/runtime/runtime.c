@@ -7,20 +7,21 @@
 #include "../debug.h"
 #include "../data/s_tfobj.h"
 
-
+/* Register basic math functions in the context */
 void basicMathFunctions(s_tfcontext *ctx, char *name) {
 //    if (!tfcontextCheckStackMinLen(ctx, 2)) return;
     int result = 0;
 
-    s_tfobj *b = tfcontextPop(ctx, INT); // Top dello stack
+    /* Pop the top of the stack */
+    s_tfobj *b = tfcontextPop(ctx, INT);
 
-    // short operators
+    /* Short operators (single character) */
     if (strlen(name) == 1) {
 
-        // Nota: L'ordine di pop è inverso (LIFO).
-        s_tfobj *a = tfcontextPop(ctx, INT); // Sotto il top
+        /* Note: Pop order is LIFO */
+        s_tfobj *a = tfcontextPop(ctx, INT); // Under the top
 
-        if (a == NULL || b == NULL) return; // Controllo sicurezza
+        if (a == NULL || b == NULL) return; // Safety check
 
         switch (name[0]) {
             case '+':result = a->i + b->i;break;
@@ -31,15 +32,15 @@ void basicMathFunctions(s_tfcontext *ctx, char *name) {
 
         tfobjRelease(a);
     }
-    // long operators
+        /* Long operators (multi-character) */
     else {
         LOG_E("Long operator");
         if (strcmp(name, "pow") == 0) {
             result = b->i * b->i;
         } else if (strcmp(name, "dup") == 0) {
             result = b->i * 2;
-        }else if (strcmp(name, "abs") == 0) {
-            result =abs(b->i);
+        } else if (strcmp(name, "abs") == 0) {
+            result = abs(b->i);
         }
     }
 
@@ -48,13 +49,14 @@ void basicMathFunctions(s_tfcontext *ctx, char *name) {
     tfcontextPush(ctx, tfobjCreateInt(result));
 }
 
+/* Execute a symbol from the function table; return true if found */
 bool runSymbol(s_tfcontext *ctx, s_tfobj *word) {
     LOG_I("Running symbol\n");
     s_function_table_entry *entry = tfcontextGetFunction(ctx, word);
     if (entry == NULL) return false;
 
     if (entry->user_func) {
-        return false; // fixme to implement
+        return false; // FIXME: user-defined function not implemented
     } else {
         LOG_I("Executing callback\n");
         entry->callback(ctx, entry->name->str.ptr);
@@ -63,6 +65,7 @@ bool runSymbol(s_tfcontext *ctx, s_tfobj *word) {
     return true;
 }
 
+/* Execute a compiled Forth object */
 void exec(s_tfcontext *ctx, const s_tfobj *obj) {
     assert(obj->type == LIST);
     LOG_I("Passed exec assertion\n");
@@ -75,7 +78,7 @@ void exec(s_tfcontext *ctx, const s_tfobj *obj) {
                     tfobjDump(word);
                 }
                 break;
-            default: // Se non è un simbolo,allora va nello stack
+            default: /* If not a symbol, push it to the stack */
                 tfcontextPush(ctx, word);
                 tfobjRetain(word);
                 break;

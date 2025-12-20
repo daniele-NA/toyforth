@@ -55,3 +55,4 @@ void tfobjListPush(s_tfobj *list, s_tfobj *ele);
 /* ===== Debug ===== */
 
 void tfobjDump(const s_tfobj *program);
+char * tfobjToString(const s_tfobj *program);

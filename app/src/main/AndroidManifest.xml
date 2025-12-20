@@ -3,6 +3,7 @@
 
     <application
         android:icon="@mipmap/mpm_icon"
+        android:roundIcon="@mipmap/mpm_icon"
         android:label="Toy Forth">
         <activity
             android:name=".MainActivity"

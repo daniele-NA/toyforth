@@ -136,3 +136,32 @@ void tfobjDump(const s_tfobj *program) {
     }
     LOG_I("]\n");
 }
+
+char * tfobjToString(const s_tfobj *program){
+    if(program==NULL || program->list.ele==NULL || program->type!=LIST) return "";
+
+    char *ret = calloc(256, 1);
+    if (!ret) return NULL;
+
+    for (size_t i = 0; i < program->list.len; ++i) {
+        const s_tfobj *o = program->list.ele[i];
+        if(o==NULL) continue;
+        switch (o->type) {
+            case INT: {
+                // parsing e concatena
+                snprintf(ret + strlen(ret),
+                        sizeof(ret) - strlen(ret),
+                        "%d", o->i);
+                break;
+            }
+            case SYMBOL: if(o->str.ptr!=NULL) strcat(ret,o->str.ptr);
+                break;
+            case LIST: tfobjDump(o);
+                break;
+            default:
+                strcat(ret,"?");
+                break;
+        }
+    }
+    return ret;
+}

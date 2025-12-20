@@ -27,7 +27,7 @@ Use with care.
 
 ## 🎥 Preview
 
-[Watch the Video](ASSETS/preview.mp4)
+![ToyForth demo](ASSETS/preview.gif)
 
 ## 🖥️ Interactive Shell
 

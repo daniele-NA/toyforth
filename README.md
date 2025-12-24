@@ -1,4 +1,4 @@
-# ⚙️ ToyForth Interpreter (Android)
+# ⚙️ ToyForth Interpreter
 
 ## Overview
 

@@ -1,6 +1,8 @@
 package com.app.toyforth.presentation
 
+import android.graphics.RuntimeShader
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,14 +17,19 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -54,11 +61,36 @@ fun MainScreen(
         }
     }
 
-    LazyColumn(
+    // AGSL shader background //
+    val context = LocalContext.current
+    val shader = remember {
+        val src = context.assets.open("shaders/orbit.agsl").bufferedReader().readText()
+        RuntimeShader(src)
+    }
+    var time by remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(Unit) {
+        val start = withFrameMillis { it }
+        while (true) {
+            withFrameMillis { frameTime ->
+                time = (frameTime - start) / 1000f
+            }
+        }
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(bgColor)
-            .padding(pv),
+            .padding(pv)
+            .drawBehind {
+                shader.setFloatUniform("iResolution", size.width, size.height)
+                shader.setFloatUniform("iTime", time)
+                drawRect(brush = ShaderBrush(shader))
+            },
+        contentAlignment = Alignment.Center
+    ) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp)
     ) {
         items(lines.size) { i ->
@@ -104,8 +136,8 @@ fun MainScreen(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
-                        focusedContainerColor = bgColor,
-                        unfocusedContainerColor = bgColor,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
                         cursorColor = Color.White
@@ -122,5 +154,6 @@ fun MainScreen(
             }
         }
     }
+    } // Box
 
 }

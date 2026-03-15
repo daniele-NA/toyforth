@@ -8,9 +8,10 @@ android {
     namespace = "com.app.toyforth"
     compileSdk = 36
 
+    ndkVersion = "29.0.13846066"
     defaultConfig {
         applicationId = "com.app.toyforth"
-        minSdk = 29
+        minSdk = 33
         targetSdk = 36
         versionCode = 1
     }

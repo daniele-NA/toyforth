@@ -1,66 +1,33 @@
-# ⚙️ ToyForth Interpreter (Android)
+# ToyForth
 
-## Overview
+A minimal **Forth interpreter written in C**, embedded in an Android app via **JNI**.
 
-This repository contains a **small ToyForth interpreter written in C**, embedded in an Android project through **JNI**.
+The app serves as an interactive shell — the interpreter runs entirely in native code.
 
-The Android app exists mainly as a **host and interactive shell**. The interpreter is the core of the project and runs entirely in native code.
+## Interpreter
 
-## 🧠 Interpreter Focus
-
-* Implemented entirely in **C**
+* Written in **C**, exposed through JNI
 * Minimal Forth-like execution model
-* Designed for experimentation and learning
-* Exposed through a simple interactive shell
-
-The UI layer is intentionally thin and secondary.
-
-## ⚠️ Limitations
-
-This is a **minimal interpreter**.
-
 * Operates **only on integers**
-* Several integrity and safety checks are **not implemented**
-* Invalid input may cause crashes or undefined behavior
+* Available words: `+ - * / dup abs pow`
 
-Use with care.
+> This is a learning project — safety checks are minimal and invalid input may crash.
 
-## 🖥️ Interactive Shell
+## AGSL Shaders
 
-The application provides a basic REPL:
+The app uses **AGSL** (Android Graphics Shading Language) for real-time animated backgrounds.
 
-* Input is sent directly to the interpreter
-* Execution happens in native code
-* Output is printed back to the shell
+Shader files live in `assets/shaders/` and are loaded at runtime:
 
-### Currently Available Commands
-
-```
-+  -  *  /
-dup  abs  pow
+```kotlin
+val src = context.assets.open("shaders/orbit.agsl").bufferedReader().readText()
+RuntimeShader(src)
 ```
 
-## 🔧 Extending the Interpreter
+Uniforms (`iResolution`, `iTime`) are updated every frame via `drawBehind` in Compose.
 
-To add new functionality:
+## Tech Stack
 
-1. Implement the word in the C source
-2. Register it in the interpreter dictionary
-3. Rebuild the native library
-4. Test carefully
-
-JNI changes are only needed when interaction with Kotlin is required.
-
-## 🧩 Tech Stack
-
-* C (ToyForth interpreter)
-* Android NDK
-* JNI
-* Kotlin
-* Jetpack Compose
-
-## 📎 Notes
-
-This project favors **clarity and control over completeness**. It is not meant to be safe or production-ready.
-
----
+* C + Android NDK + JNI
+* Kotlin + Jetpack Compose
+* AGSL (RuntimeShader)

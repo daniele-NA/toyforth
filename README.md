@@ -1,94 +1,37 @@
-# ⚙️ ToyForth Interpreter
+# ToyForth
 
-## Overview
+A minimal **Forth interpreter written in C**, embedded in an Android app via **JNI**.
 
-This repository contains a **small ToyForth interpreter written in C**, embedded in an Android project through **JNI**.
+The app serves as an interactive shell — the interpreter runs entirely in native code.
 
-The Android app exists mainly as a **host and interactive shell**. The interpreter is the core of the project and runs entirely in native code.
-
-## 🧠 Interpreter Focus
-
-* Implemented entirely in **C**
-* Minimal Forth-like execution model
-* Designed for experimentation and learning
-* Exposed through a simple interactive shell
-
-The UI layer is intentionally thin and secondary.
-
-## ⚠️ Limitations
-
-This is a **minimal interpreter**.
-
-* Operates **only on integers**
-* Several integrity and safety checks are **not implemented**
-* Invalid input may cause crashes or undefined behavior
-
-Use with care.
-
-## 🎥 Preview
+## Preview
 
 ![ToyForth demo](ASSETS/preview.gif)
 
-## 🖥️ Interactive Shell
+## Interpreter
 
-The application provides a basic REPL:
+* Written in **C**, exposed through JNI
+* Minimal Forth-like execution model
+* Operates **only on integers**
+* Available words: `+ - * / dup abs pow`
 
-* Input is sent directly to the interpreter
-* Execution happens in native code
-* Output is printed back to the shell
+> This is a learning project — safety checks are minimal and invalid input may crash.
 
-### Currently Available Commands
+## AGSL Shaders
 
-```
-+  -  *  /
-dup  abs  pow
-```
+The app uses **AGSL** (Android Graphics Shading Language) for real-time animated backgrounds.
 
-## 🔧 Extending the Interpreter
+Shader files live in `assets/shaders/` and are loaded at runtime:
 
-To add new functionality:
-
-1. Implement the word in the C source
-2. Register it in the interpreter dictionary
-3. Rebuild the native library
-4. Test carefully
-
-JNI changes are only needed when interaction with Kotlin is required.
-
-To add a new mathematical function:
-
-1. **Update the symbol list** (`sym_chars`) in `tfparserIsSymbol`:
-
-```c
-const char sym_chars[] = "+-*/powdupabsnewFunction";
+```kotlin
+val src = context.assets.open("shaders/orbit.agsl").bufferedReader().readText()
+RuntimeShader(src)
 ```
 
-2. **Register the function** in `tfcontextCreate`:
+Uniforms (`iResolution`, `iTime`) are updated every frame via `drawBehind` in Compose.
 
-```c
-tfcontextNewCFunction(ctx,"newFunction",basicMathFunctions);
-```
+## Tech Stack
 
-3. **Implement the callback** in `basicMathFunctions`:
-
-```c
-if(strcmp(word,"newFunction")==0){
-    // code for the new function
-}
-```
-
-4. Rebuild the native library and test.
-
-## 🧩 Tech Stack
-
-* C (ToyForth interpreter)
-* Android NDK
-* JNI
-* Kotlin
-* Jetpack Compose
-
-## 📎 Notes
-
-This project favors **clarity and control over completeness**. It is not meant to be safe or production-ready.
-
----
+* C + Android NDK + JNI
+* Kotlin + Jetpack Compose
+* AGSL (RuntimeShader)
